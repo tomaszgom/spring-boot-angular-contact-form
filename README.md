@@ -25,9 +25,9 @@ to do that:
 
 Application is setup in configuration file: 
 \contact-form\proxy.conf.json
-to be launched at address/port:
+to be launched at:
 
-http://localhost:8080
+'http://localhost:8080'
 
 
 
