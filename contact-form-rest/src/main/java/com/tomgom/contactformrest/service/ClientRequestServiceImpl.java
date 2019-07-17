@@ -12,7 +12,7 @@ import com.tomgom.contactformrest.repository.ClientRequestRepository;
 
 /**
  * 
- * ClientRequestService (business logic) layer
+ * Client Request Service (business logic) layer
  *
  */
 
