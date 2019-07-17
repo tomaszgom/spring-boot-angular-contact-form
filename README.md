@@ -24,6 +24,7 @@ It is set up to be built into one JAR file available in /target directory, to do
 In project directory '/jar-backup' backup .jar file has been saved which is already built for review purposes.
 
 Application is setup in configuration file: 
+
 \contact-form\proxy.conf.json
 to be launched at:
 
