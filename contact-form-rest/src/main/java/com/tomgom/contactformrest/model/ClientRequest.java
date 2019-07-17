@@ -1,12 +1,10 @@
 package com.tomgom.contactformrest.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  * 
@@ -20,12 +18,15 @@ import javax.persistence.Table;
 public class ClientRequest {
 	
 	@Id
-	@GeneratedValue//(strategy = GenerationType.AUTO, generator="entity_seq_gen")
-//	@SequenceGenerator(name="entity_seq_gen", sequenceName="hr.PROJECT_TASK_SEQ")
-//	@Column(name="ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;	
+	
+	@Size(min = 1, max = 25)
 	private String firstName;
+	
+	@Size(min = 1, max = 25)
 	private String lastName;
+	
 	private String emailAddress;
 	private String postalAddress;
 	private String phone;
@@ -35,9 +36,8 @@ public class ClientRequest {
 		
 	}
 	
-	public ClientRequest(Integer id, String firstName, String lastName, String emailAddress, String postalAddress,
+	public ClientRequest(String firstName, String lastName, String emailAddress, String postalAddress,
 			String phone, String contactPurpose) {
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.emailAddress = emailAddress;
