@@ -1,5 +1,7 @@
 package com.tomgom.contactformrest.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -7,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Test;
@@ -20,8 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.mockito.InjectMocks;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomgom.contactformrest.ContactFormRestApplication;
@@ -31,7 +33,7 @@ import com.tomgom.contactformrest.repository.ClientRequestRepository;
 
 /**
  * 
- * Client Request Controller testing GET nd POST
+ * Client Request Controller testing GET and POST
  *
  */
 
@@ -45,7 +47,7 @@ public class ClientRequestControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
-    @MockBean
+	@Autowired
     private ClientRequestRepository clientRequestRepository;
 
     @After
@@ -55,7 +57,7 @@ public class ClientRequestControllerTest {
     
 		
     @Test
-    public void whenValidInput_thenCreateClientRequest() throws Exception{
+    public void whenValidInput_CreatedClientRequest() throws Exception{
     	ClientRequest clientRequest = new ClientRequest("John","Smith","john@cf.com","Address 1","333-444","Purpose of request 1");
     	
     	mockMvc.perform( MockMvcRequestBuilders
@@ -64,6 +66,10 @@ public class ClientRequestControllerTest {
           .contentType(MediaType.APPLICATION_JSON)
           .accept(MediaType.APPLICATION_JSON))
           .andExpect(status().isCreated());
+          
+          List<ClientRequest> found = clientRequestRepository.findAll();
+          assertThat(found).extracting(ClientRequest::getLastName).contains("Smith");
+
     }
 		
 	@Test
@@ -77,7 +83,9 @@ public class ClientRequestControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(0))));
+        .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(2))))
+    	.andExpect(jsonPath("$[0].lastName", is("Smith")))
+        .andExpect(jsonPath("$[1].lastName", is("Jones"))); 
 	}
 		
     private void createClientRequest( String firstName,String lastName,String email,String address,String phone, String contactPurpose) {
